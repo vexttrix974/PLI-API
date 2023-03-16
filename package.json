@@ -1,7 +1,7 @@
 {
   "name": "scooby_api",
   "version": "1.0.0",
-  "description": "conception de l'api pour scooby",
+  "description": "Creation of the API for the Scooby mobile application",
   "main": "index.ts",
   "scripts": {
     "dev": "nodemon",
