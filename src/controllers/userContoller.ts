@@ -65,6 +65,11 @@ export async function deleteById(req: Request, res: Response) {
   }
 }
 
+/*
+ * The function returns a json object with an access token if
+ * the user is found in the database, and an error message if the user is not found
+ */
+
 export async function loginUser(req: Request, res: Response) {
   const username = req.body.username;
   const password = req.body.password;
