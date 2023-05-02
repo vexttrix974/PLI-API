@@ -35,7 +35,7 @@ export async function register(req: Request, res: Response) {
     await createUser(req, res);
   } catch (error: any) {
     res.send({
-      message: "This is an",
+      message:error.message,
       error,
     });
   }
@@ -47,7 +47,7 @@ export async function updateById(req: Request, res: Response) {
     await updateUser(req, res);
   } catch (error: any) {
     res.send({
-      message: "This is an",
+      message:error.message,
       error,
     });
   }
@@ -59,7 +59,7 @@ export async function deleteById(req: Request, res: Response) {
     await deleteUser(req, res);
   } catch (error: any) {
     res.send({
-      message: "This is an",
+      message: error.message,
       error,
     });
   }

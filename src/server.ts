@@ -1,3 +1,4 @@
+import routermatch from "./routes/MatchRoute";
 import routeruser from "./routes/userRoute";
 
 const cors = require("cors");
@@ -11,7 +12,8 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/', routeruser);
+app.use('/users', routeruser);
+app.use('/match', routermatch);
 
 app.listen(port, () => {
   // console.log(`Example app listening on port ${port}`);
