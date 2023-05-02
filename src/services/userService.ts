@@ -57,6 +57,7 @@ export async function updateUser(req: Request, res: Response) {
 /* It deletes a user from the database based on the id passed in the request */
 export async function deleteUser(req: Request, res: Response) {
   const userId = req.params.id;
+  
   try {
     await db.collection("Users").doc(userId).delete();
     res.json({ message: "User deleted successfully" });
