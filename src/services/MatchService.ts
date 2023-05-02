@@ -7,8 +7,6 @@ import { db } from '../database/admin';
 /* This function creates a new user in the database */
 export async function createMatch(req: Request, res: Response) {
   const MatchData: Mactchinterface = {
-
-    id : req.body.id,
     user_id_1 : req.body.user_id_1,
     user_id_2 : req.body.user_id_2 ,
     status : req.body.status,
@@ -37,7 +35,6 @@ export async function updateMatch(req: Request, res: Response) {
     const MatchId = req.params.id;
     const MatchData: Mactchinterface = {
 
-        id : req.body.id,
         user_id_1 : req.body.user_id_1,
         user_id_2 : req.body.number.user_id_2 ,
         status : req.body.status,
