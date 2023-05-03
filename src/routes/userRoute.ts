@@ -4,16 +4,16 @@ const express = require('express');
 
 const routeruser = express();
 
-routeruser.get('/users', getAll);
+routeruser.get('/', getAll);
 
-routeruser.get('/users/:id', getById);
+routeruser.get('/:id', getById);
 
-routeruser.post('/users/register', register);
+routeruser.post('/register', register);
 
-routeruser.patch('/users/:id', updateById);
+routeruser.put('/:id', updateById);
 
-routeruser.delete('/users/:id', deleteById);
+routeruser.delete('/:id', deleteById);
 
-routeruser.post('/users/auth', loginUser);
+routeruser.post('/auth', loginUser);
 
 export default routeruser;
