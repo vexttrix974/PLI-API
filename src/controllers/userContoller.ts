@@ -12,8 +12,11 @@ const jwt = require("jsonwebtoken");
 export async function getAll(req: Request, res: Response) {
   const QueryResult = await db.collection("Users").get();
   const users: any[] = [];
-  QueryResult.forEach((doc: { data: () => any }) => {
-    users.push(doc.data());
+
+  QueryResult.forEach((doc: { data: () => any, ref: any }) => {
+    const user = doc.data()
+    user.id = doc.ref.id;
+    users.push(user);
   });
   res.json(users);
 }

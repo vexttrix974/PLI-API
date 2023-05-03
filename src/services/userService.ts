@@ -17,7 +17,7 @@ export async function createUser(req: Request, res: Response) {
     gender: req.body.gender,
     location: req.body.location,
     interests: req.body.interests,
-    profile_picture: req.body.profile_picture,
+    profile_picture: req.body.profile_picture
   };
 
   try {
@@ -51,7 +51,7 @@ export async function createUser(req: Request, res: Response) {
 /* This function updates a user's information in the database */
 export async function updateUser(req: Request, res: Response) {
   const userId = req.params.id;
-  const hash = await bcrypt.hash(req.body.password, 10);
+  const hash = req.body.password ?await bcrypt.hash(req.body.password, 10):"";
   const userData: Userinterface = {
     username: req.body.username,
     email: req.body.email,
@@ -66,14 +66,15 @@ export async function updateUser(req: Request, res: Response) {
   try {
     await db.collection("Users").doc(userId).update(userData);
     res.json({ message: "User updated successfully" });
-  } catch (error) {
-    res.status(500).json({ message: "Unable to update user", error });
+  } catch (error:any) {
+    res.status(500).json({ message: error.message });
   }
 }
 
 /* It deletes a user from the database based on the id passed in the request */
 export async function deleteUser(req: Request, res: Response) {
   const userId = req.params.id;
+  
   try {
     await db.collection("Users").doc(userId).delete();
     res.json({ message: "User deleted successfully" });
