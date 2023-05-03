@@ -1,16 +1,17 @@
-import { Request, Response } from 'express';
-import { Userinterface } from '../interfaces';
-import { db } from '../database/admin';
+import e, { Request, Response } from "express";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { Userinterface } from "../interfaces";
+import { db } from "../database/admin";
+import { auth } from "../database/firebase";
 
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 
 /* This function creates a new user in the database */
 export async function createUser(req: Request, res: Response) {
-  const hash = req.body.password ?await bcrypt.hash(req.body.password, 10):"";
   const userData: Userinterface = {
     username: req.body.username,
     email: req.body.email,
-    password: hash,
+    password: req.body.password,
     name: req.body.name,
     age: req.body.age,
     gender: req.body.gender,
@@ -18,15 +19,31 @@ export async function createUser(req: Request, res: Response) {
     interests: req.body.interests,
     profile_picture: req.body.profile_picture
   };
+
   try {
-    const userRef = await db.collection("Users").add(userData);
+    const { user } = await createUserWithEmailAndPassword(
+      auth,
+      userData.email,
+      userData.password
+    );
+    const hash = await bcrypt.hash(req.body.password, 10);
+    const userRef = await db.collection("Users").doc(user.uid).set({
+      username: userData.username,
+      email: userData.email,
+      password: hash,
+      name: userData.name,
+      age: userData.age,
+      gender: userData.gender,
+      location: userData.location,
+      interests: userData.interests,
+      profile_picture: userData.profile_picture,
+    });
     const userSnapshot = await userRef.get();
-    const user = userSnapshot.data();
-    res.json(user);
-  } catch (error:any) {
+    const usert = userSnapshot.data();
+    res.json(usert);
+  } catch (error: any) {
     res.send({
-      message:error.message,
-      error,
+      message: error.message,
     });
   }
 }

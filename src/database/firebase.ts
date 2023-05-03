@@ -1,4 +1,7 @@
-const firebase = require("firebase");
+import { getAuth } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+
+// const firebase = require("firebase");
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,6 +15,7 @@ const firebaseConfig = {
 
 
 // initialise l'application firebase
-firebase.initializeApp(firebaseConfig);
-//exporter l'application
-module.exports = { firebase };
+export const app = initializeApp(firebaseConfig);
+
+export const auth  = getAuth(app)
+
