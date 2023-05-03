@@ -4,7 +4,7 @@ import { db } from '../database/admin';
 
 
 
-/* This function creates a new user in the database */
+/* This function creates a new announce in the database */
 export async function createAnnounces(req: Request, res: Response) {
   const AnnounceData: Announceinterface = {
 
@@ -32,7 +32,7 @@ export async function createAnnounces(req: Request, res: Response) {
   }
 }
 
-/* This function updates a user's information in the database */
+/* This function updates a announce's information in the database */
 export async function updateAnnounces(req: Request, res: Response) {
     const Annonceid = req.params.id;
     const AnnounceData: Announceinterface = {
@@ -52,7 +52,7 @@ export async function updateAnnounces(req: Request, res: Response) {
   }
 }
 
-/* It deletes a user from the database based on the id passed in the request */
+/* It deletes a announce from the database based on the id passed in the request */
 export async function deleteAnnounces(req: Request, res: Response) {
   const Annonceid = req.params.id;
   try {

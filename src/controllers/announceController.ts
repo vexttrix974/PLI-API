@@ -1,4 +1,3 @@
-// import { Userinterface } from "../interfaces";
 import * as dotenv from 'dotenv';
 import { Request, Response } from "express";
 import { db } from "../database/admin";
@@ -52,7 +51,7 @@ export async function updateById(req: Request, res: Response) {
   }
 }
 
-/* The function deletes a user by its id */
+/* The function deletes a announce by its id */
 export async function deleteById(req: Request, res: Response) {
   try {
     await deleteAnnounces(req, res);
@@ -63,9 +62,4 @@ export async function deleteById(req: Request, res: Response) {
     });
   }
 }
-
-/*
- * The function returns a json object with an access token if
- * the user is found in the database, and an error message if the user is not found
- */
 
