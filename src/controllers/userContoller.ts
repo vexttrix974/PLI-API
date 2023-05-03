@@ -35,8 +35,8 @@ export async function register(req: Request, res: Response) {
     await createUser(req, res);
   } catch (error: any) {
     res.send({
-      message: "This is an",
-      error,
+      message:
+      error.message,
     });
   }
 }
@@ -47,8 +47,7 @@ export async function updateById(req: Request, res: Response) {
     await updateUser(req, res);
   } catch (error: any) {
     res.send({
-      message: "This is an",
-      error,
+      message: error.message,
     });
   }
 }
@@ -59,8 +58,7 @@ export async function deleteById(req: Request, res: Response) {
     await deleteUser(req, res);
   } catch (error: any) {
     res.send({
-      message: "This is an",
-      error,
+      message: error.message,
     });
   }
 }
@@ -74,35 +72,12 @@ export async function loginUser(req: Request, res: Response) {
   const username = req.body.username;
   const password = req.body.password;
   try {
-    const userQuery = await db
-      .collection("Users")
-      .where("username", "==", username)
-      .get();
-    if (userQuery.empty) {
-      res.status(401).json({ message: "Invalid username or password" });
-    } else {
-      const userDoc = userQuery.docs[0];
-      const userData = userDoc.data();
-      const passwordMatch = await bcrypt.compare(password, userData.password);
-      if (passwordMatch) {
-        const acces = jwt.sign(
-          {
-            email: username,
-            password: password,
-          },
-          process.env.JWT_SIGN_SECRET,
-          {
-            expiresIn: "24h",
-          }
-        );
-        res.json({ accesToken: acces });
+    const { user } = await db.auth().signInWithEmailAndPassword(username, password);
 
-        res.json({ message: "Login successful", user: userData });
-      } else {
-        res.status(401).json({ message: "Invalid username or password" });
-      }
-    }
+    // If authentication is successful, generate a JWT token and send it to the client
+    const accessToken = jwt.sign({ uid: user.uid }, process.env.JWT_SIGN_SECRET, { expiresIn: '24h' });
+    res.json({ accessToken, message: 'Login successful' });
   } catch (error) {
-    res.status(500).json({ message: "Unable to login", error });
+    res.status(401).json({ message: 'Invalid username or password' });
   }
 }
