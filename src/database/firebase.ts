@@ -1,7 +1,6 @@
 import { getAuth } from "firebase/auth";
 import { initializeApp } from "firebase/app";
 
-// const firebase = require("firebase");
 
 // Your web app's Firebase configuration
 const firebaseConfig = {

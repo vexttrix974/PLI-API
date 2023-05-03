@@ -4,7 +4,7 @@ import { db } from '../database/admin';
 
 
 
-/* This function creates a new user in the database */
+/* This function creates a new match in the database */
 export async function createMatch(req: Request, res: Response) {
   const MatchData: Mactchinterface = {
     user_id_1 : req.body.user_id_1,
@@ -30,7 +30,7 @@ export async function createMatch(req: Request, res: Response) {
   }
 }
 
-/* This function updates a user's information in the database */
+/* This function updates a match's information in the database */
 export async function updateMatch(req: Request, res: Response) {
     const MatchId = req.params.id;
     const MatchData: Mactchinterface = {
@@ -49,7 +49,7 @@ export async function updateMatch(req: Request, res: Response) {
   }
 }
 
-/* It deletes a user from the database based on the id passed in the request */
+/* It deletes a match from the database based on the id passed in the request */
 export async function deleteMatch(req: Request, res: Response) {
   const MatchId = req.params.id;
   try {

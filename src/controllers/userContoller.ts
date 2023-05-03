@@ -1,7 +1,9 @@
 // import { Userinterface } from "../interfaces";
-import * as dotenv from 'dotenv';
-import { Request, Response } from "express";
+import * as dotenv from "dotenv";
 import { db } from "../database/admin";
+import { Request, Response } from "express";
+import { auth } from "../database/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { createUser, updateUser, deleteUser } from "../services/userService";
 
 dotenv.config();
@@ -13,8 +15,8 @@ export async function getAll(req: Request, res: Response) {
   const QueryResult = await db.collection("Users").get();
   const users: any[] = [];
 
-  QueryResult.forEach((doc: { data: () => any, ref: any }) => {
-    const user = doc.data()
+  QueryResult.forEach((doc: { data: () => any; ref: any }) => {
+    const user = doc.data();
     user.id = doc.ref.id;
     users.push(user);
   });
@@ -38,8 +40,7 @@ export async function register(req: Request, res: Response) {
     await createUser(req, res);
   } catch (error: any) {
     res.send({
-      message:
-      error.message,
+      message: error.message,
     });
   }
 }
@@ -72,15 +73,19 @@ export async function deleteById(req: Request, res: Response) {
  */
 
 export async function loginUser(req: Request, res: Response) {
-  const username = req.body.username;
+  const email = req.body.email;
   const password = req.body.password;
   try {
-    const { user } = await db.auth().signInWithEmailAndPassword(username, password);
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
 
     // If authentication is successful, generate a JWT token and send it to the client
-    const accessToken = jwt.sign({ uid: user.uid }, process.env.JWT_SIGN_SECRET, { expiresIn: '24h' });
-    res.json({ accessToken, message: 'Login successful' });
+    const accessToken = jwt.sign(
+      { uid: user.uid },
+      process.env.JWT_SIGN_SECRET,
+      { expiresIn: "24h" }
+    );
+    res.json({ accessToken, message: "Login successful" });
   } catch (error) {
-    res.status(401).json({ message: 'Invalid username or password' });
+    res.status(401).json({ message: "Invalid username or password" });
   }
 }

@@ -1,4 +1,3 @@
-
 import * as dotenv from 'dotenv';
 import { Request, Response } from "express";
 import { db } from "../database/admin";
@@ -11,7 +10,6 @@ dotenv.config();
 export async function getAll(req: Request, res: Response) {
   const QueryResult = await db.collection("Match").get();
   const match: any[] = [];
-//   console.log(QueryResult.data())
   let matches :any []= []
   QueryResult.forEach(async (doc: { data: () => any }) => {
     matches.push(doc)
