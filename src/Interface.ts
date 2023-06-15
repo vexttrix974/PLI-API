@@ -18,3 +18,10 @@ export default interface User {
     link_url : string;
     created_at : Date;
   }
+  export default interface Match{
+    id :number;
+    user_id_1:number ;
+    user_id_2:number;
+    status: string;
+    created_at :Date;
+  }
