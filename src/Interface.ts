@@ -10,3 +10,11 @@ export default interface User {
     interests: string;
     profile_picture: string;
   }
+ export default interface Annonces {
+    id: number ;   
+    title : string;
+    description:string;
+    image_url:string;
+    link_url : string;
+    created_at : Date;
+  }

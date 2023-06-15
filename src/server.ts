@@ -1,4 +1,5 @@
 import routerusers from './routes/users.routes';
+import routerannounces from './routes/annonces.routes';
 
 const cors = require("cors");
 const express = require('express');
@@ -12,6 +13,7 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/', routerusers);
+app.use('/', routerannounces);
 
 
 app.listen(port, () => {

@@ -3,11 +3,13 @@ import { Request, Response } from 'express';
 import User from '../Interface';
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-// create new users 
+/**
+ *  create the users
+*/
 export async function createUser(req: Request, res:{ send: (arg0: string) => Response; }) {
   try {
 
-    const userData: User = req.body;
+    const userData: User  = req.body;
 
     const user = await prisma.user.create({
       data: userData,
@@ -18,26 +20,30 @@ export async function createUser(req: Request, res:{ send: (arg0: string) => Res
     console.log(error);
   }
 }
-// update the users
+/**
+ *  update the users
+*/
 export async function updateUser(req: Request, res:{ send: (arg0: string) => Response; }) {
   try {
-    const { id } = req.params;
-    await prisma.user.update(
-      req.body,
-      {
+    const  id  = parseInt(req.params.id);
+    await prisma.user.update({
+        data:req.body,
         where: { id },
       },
-    ); const newuser = await prisma.user.findUnique(id);
+    );
+     const newuser = await prisma.user.findUnique({ where: { id }});
     res.send(JSON.stringify(newuser, null, 2));
   } catch (error) {
-    res.send('User has been updated');
+    res.send('User has not been updated');
   }
 }
 
-// delete users
+/**
+ *  delete the users
+*/
 export async function deleteUser(req: Request, res:{ send: (arg0: string) => Response; }) {
   try {
-    const { id } = req.params;
+    const  id  = parseInt(req.params.id);
     await prisma.user.delete({
       where: { id },
     });

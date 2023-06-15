@@ -10,11 +10,15 @@ export default function authenticateJWT(req: Request, res: Response, next: Funct
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(' ')[1];
-    jwt.verify(token, process.env.JWT_SIGN_SECRET, (err: any) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err: any) => {
+      console.log(err)
+      
       if (err) {
         res.sendStatus(403);
+      }else{
+        next();
       }
-      next();
+    
     });
   } else {
     res.sendStatus(401);
