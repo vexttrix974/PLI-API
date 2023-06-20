@@ -1,10 +1,12 @@
-import routermatch from "./routes/MatchRoute";
-import routerannounces from "./routes/announceRoute";
-import routeruser from "./routes/userRoute";
+import routerusers from './routes/users.routes';
+import routerannounces from './routes/annonces.routes';
+import routermatch from './routes/match.routes'
+import routermessages from './routes/message.routes';
 
 const cors = require("cors");
 const express = require('express');
 const bodyParser = require('body-parser');
+
 
 const app = express();
 const port = 3000;
@@ -12,10 +14,11 @@ const port = 3000;
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
+app.use('/', routerusers);
+app.use('/', routerannounces);
+app.use('/', routermatch);
+app.use('/',routermessages);
 
-app.use('/users', routeruser);
-app.use('/match', routermatch);
-app.use('/announces',routerannounces);
 
 app.listen(port, () => {
   // console.log(`Example app listening on port ${port}`);

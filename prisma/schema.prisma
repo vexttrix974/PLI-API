@@ -1,0 +1,66 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               Int      @id @default(autoincrement())
+  username         String
+  email            String   @unique
+  password         String
+  name             String
+  age              Int
+  gender           String
+  location         String
+  interest         String
+  profile_picture  String
+  matchliked       Match[] @relation("likes")
+  matched          Match[] @relation("matches")
+  
+  sent_messages   Message[] @relation("sender")
+  received_messages Message[] @relation("receiver")
+
+}
+
+
+
+model Match {
+id  Int      @id @default(autoincrement())
+userLiked    User @relation(name:"likes", fields: [user_id_1] , references: [id])
+userMatched   User @relation(name:"matches", fields: [user_id_2] , references: [id])
+user_id_1 Int 
+user_id_2  Int 
+status  String
+messages   Message[] @relation("matchmessages")
+created_at  DateTime @default(now()) 
+
+} 
+
+
+
+model Annonces {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  image_url   String
+  link_url    String
+  created_at  DateTime @default(now()) 
+}
+model Message {
+  id           Int      @id @default(autoincrement())
+  match_id     Int     
+  sender_id    Int     
+  receiver_id  Int     
+  content      String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  match        Match    @relation(name:"matchmessages",fields: [match_id], references: [id])
+  sender       User @relation(name:"sender", fields: [sender_id], references: [id])
+  receiver     User @relation(name:"receiver", fields: [receiver_id], references: [id])
+}
+
