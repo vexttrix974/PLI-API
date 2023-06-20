@@ -47,7 +47,7 @@ export async function deleteUser(req: Request, res:{ send: (arg0: string) => Res
     await prisma.user.delete({
       where: { id },
     });
-    res.send('200 OK');
+    res.send('User delete');
   } catch (error) {
     res.send('User not delete');
   }

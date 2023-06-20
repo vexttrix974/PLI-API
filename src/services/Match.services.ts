@@ -49,7 +49,7 @@ export async function deleteMatch(req: Request, res:{ send: (arg0: string) => Re
     await prisma.match.delete({
       where: { id },
     });
-    res.send('200 OK');
+    res.send('Match not delete');
   } catch (error) {
     res.send('Match  not delete');
   }

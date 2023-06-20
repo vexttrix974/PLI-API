@@ -1,6 +1,7 @@
 import routerusers from './routes/users.routes';
 import routerannounces from './routes/annonces.routes';
 import routermatch from './routes/match.routes'
+import routermessages from './routes/message.routes';
 
 const cors = require("cors");
 const express = require('express');
@@ -16,6 +17,7 @@ app.use(bodyParser.json());
 app.use('/', routerusers);
 app.use('/', routerannounces);
 app.use('/', routermatch);
+app.use('/',routermessages);
 
 
 app.listen(port, () => {

@@ -20,6 +20,9 @@ model User {
   profile_picture  String
   matchliked       Match[] @relation("likes")
   matched          Match[] @relation("matches")
+  
+  sent_messages   Message[] @relation("sender")
+  received_messages Message[] @relation("receiver")
 
 }
 
@@ -32,7 +35,9 @@ userMatched   User @relation(name:"matches", fields: [user_id_2] , references: [
 user_id_1 Int 
 user_id_2  Int 
 status  String
-created_at  DateTime
+messages   Message[] @relation("matchmessages")
+created_at  DateTime @default(now()) 
+
 } 
 
 
@@ -43,5 +48,19 @@ model Annonces {
   description String
   image_url   String
   link_url    String
-  created_at  DateTime
+  created_at  DateTime @default(now()) 
 }
+model Message {
+  id           Int      @id @default(autoincrement())
+  match_id     Int     
+  sender_id    Int     
+  receiver_id  Int     
+  content      String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  match        Match    @relation(name:"matchmessages",fields: [match_id], references: [id])
+  sender       User @relation(name:"sender", fields: [sender_id], references: [id])
+  receiver     User @relation(name:"receiver", fields: [receiver_id], references: [id])
+}
+

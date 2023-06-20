@@ -13,7 +13,7 @@ import {
   //  route getById
   routerannounces.get('/announces/:id', getById);
   //  route post
-  routerannounces.post('/announces/register/',authenticateJWT, create);
+  routerannounces.post('/announces/',authenticateJWT, create);
 
 
   // route update

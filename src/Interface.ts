@@ -25,3 +25,11 @@ export default interface User {
     status: string;
     created_at: string;
   }
+  export interface IMessage {
+    match_id : number;
+    sender_id : number;
+    receiver_id : number;
+    content : string;
+    created_at:   Date ;
+    updated_at:   Date ;
+  }

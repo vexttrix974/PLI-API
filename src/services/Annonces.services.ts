@@ -47,7 +47,7 @@ export async function deleteAnnounces(req: Request, res:{ send: (arg0: string) =
     await prisma.annonces.delete({
       where: { id },
     });
-    res.send('200 OK');
+    res.send('Annonces delete');
   } catch (error) {
     res.send('Announces  not delete');
   }
