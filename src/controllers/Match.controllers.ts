@@ -9,7 +9,10 @@ import { createMatch, updateMatch, deleteMatch } from '../services/Match.service
 */
 
 export async function getAll(req: Request, res:{ send: (arg0: string) => Response; }) {
-  const match = await prisma.Match.findMany();
+  const match = await prisma.Match.findMany({
+    include:{userLiked :true,
+      userMatched:true},
+  });
   res.send(JSON.stringify(match, null, 2));
 }
 /**
@@ -19,20 +22,24 @@ export async function getById(req: Request, res:{ send: (arg0: string) => Respon
   const  id  = parseInt(req.params.id);
   const match = await prisma.match.findUnique({
     where: { id },
+    
+      include:{userLiked :true,
+        userMatched:true},
+    
   });
   res.send(JSON.stringify(match, null, 2));
 }
 /**
  *  create the new Match
 */
-export async function create(req: Request, res:{ send: (arg0: string) => Response; }) {
-  try {
-    await createMatch(req, res);
-  } catch (error) {
-    res.send('Match not create');
-    console.log(error);
+export async function create(req: Request, res: Response) {
+    try {
+      await createMatch(req, res);
+    } catch (error) {
+      res.send('Match not created');
+      console.log(error);
+    }
   }
-}
 
 /**
  *  update the Match
