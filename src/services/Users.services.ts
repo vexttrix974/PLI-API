@@ -1,54 +1,73 @@
+import { Request, Response } from "express";
+import User from "../Interface";
+const { PrismaClient } = require("@prisma/client");
 
-import { Request, Response } from 'express';
-import User from '../Interface';
-const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-/**
- *  create the users
-*/
-export async function createUser(req: Request, res:{ send: (arg0: string) => Response; }) {
+const bcrypt = require("bcrypt");
+
+// CREATE USER
+export async function createUser(req: Request, res: Response) {
   try {
+    const datas: User = req.body;
+    const hash = await bcrypt.hash(datas.password, 10)
 
-    const userData: User  = req.body;
-
-    const user = await prisma.user.create({
-      data: userData,
+    const QueryResult = await prisma.user.create({
+      data: {
+        username: datas.username,
+        email: datas.email,
+        password: hash,
+        name: datas.name,
+        age: datas.age,
+        gender: datas.gender,
+        location: datas.location,
+        interest: datas.interest,
+        profile_picture: datas.profile_picture,
+      },
     });
-    res.send(JSON.stringify(user, null, 2));
+    res.send(JSON.stringify(QueryResult, null, 2));
   } catch (error) {
-    res.send('User not create');
+    res.send("User not create");
     console.log(error);
   }
 }
-/**
- *  update the users
-*/
-export async function updateUser(req: Request, res:{ send: (arg0: string) => Response; }) {
+
+// UPDATE USER
+export async function updateUser(req: Request, res: Response) {
   try {
-    const  id  = parseInt(req.params.id);
+    const id = parseInt(req.params.id);
+    const datas: User = req.body;
+    const hash = await bcrypt.hash(datas.password, 10);
+
     await prisma.user.update({
-        data:req.body,
-        where: { id },
+      data: {
+        username: datas.username,
+        email: datas.email,
+        password: hash,
+        name: datas.name,
+        age: datas.age,
+        gender: datas.gender,
+        location: datas.location,
+        interest: datas.interest,
+        profile_picture: datas.profile_picture,
       },
-    );
-     const newuser = await prisma.user.findUnique({ where: { id }});
-    res.send(JSON.stringify(newuser, null, 2));
+      where: { id },
+    });
+    const QueryResult = await prisma.user.findUnique({ where: { id } });
+    res.send(JSON.stringify(QueryResult, null, 2));
   } catch (error) {
-    res.send('User has not been updated');
+    res.send("User has not been updated");
   }
 }
 
-/**
- *  delete the users
-*/
-export async function deleteUser(req: Request, res:{ send: (arg0: string) => Response; }) {
+// DELETE USER
+export async function deleteUser(req: Request, res: Response) {
   try {
-    const  id  = parseInt(req.params.id);
+    const id = parseInt(req.params.id);
     await prisma.user.delete({
       where: { id },
     });
-    res.send('User delete');
+    res.send("User delete");
   } catch (error) {
-    res.send('User not delete');
+    res.send("User not delete");
   }
 }

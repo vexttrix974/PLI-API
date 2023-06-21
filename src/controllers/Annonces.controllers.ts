@@ -1,60 +1,53 @@
-import { Request, Response } from 'express';
-const { PrismaClient } = require('@prisma/client');
+import {
+  createAnnounces,
+  updateAnnounces,
+  deleteAnnounces,
+} from "../services/Annonces.services";
+import { Request, Response } from "express";
+const { PrismaClient } = require("@prisma/client");
+
 const prisma = new PrismaClient();
-import { createAnnounces, updateAnnounces, deleteAnnounces } from '../services/Annonces.services';
 
-
-/**
- *  getAll
-*/
-
-export async function getAll(req: Request, res:{ send: (arg0: string) => Response; }) {
-  const announces = await prisma.annonces.findMany();
-  res.send(JSON.stringify(announces, null, 2));
+// GET ALL
+export async function getAll(req: Request, res: Response) {
+  const QueryResult = await prisma.annonces.findMany();
+  res.send(JSON.stringify(QueryResult, null, 2));
 }
-/**
- *  getById
-*/
-export async function getById(req: Request, res:{ send: (arg0: string) => Response; }) {
-  const  id  = parseInt(req.params.id);
-  const announces = await prisma.annonces.findUnique({
+
+// GET BY ID
+export async function getById(req: Request, res: Response) {
+  const id = parseInt(req.params.id);
+  const QueryResult = await prisma.annonces.findUnique({
     where: { id },
   });
-  res.send(JSON.stringify(announces, null, 2));
+  res.send(JSON.stringify(QueryResult, null, 2));
 }
-/**
- *  create the new announces
-*/
-export async function create(req: Request, res:{ send: (arg0: string) => Response; }) {
+
+// CREATE ANNOUNCES
+export async function create(req: Request, res: Response) {
   try {
     await createAnnounces(req, res);
   } catch (error) {
-    res.send('Announces not create');
+    res.send("Announces not create");
     console.log(error);
   }
 }
 
-/**
- *  update the announces
-*/
-export async function updateById(req: Request, res:{ send: (arg0: string) => Response; }) {
+// UPDATE ANNOUNCES
+export async function updateById(req: Request, res: Response) {
   try {
     await updateAnnounces(req, res);
   } catch (error) {
-    res.send('Announces has been updated');
+    res.send("Announces has been updated");
   }
 }
 
-/**
- *  delete the announces
-*/
-export async function deleteById(req: Request, res:{ send: (arg0: string) => Response; }) {
+// DELETE ANNOUNCES
+export async function deleteById(req: Request, res: Response) {
   try {
     await deleteAnnounces(req, res);
   } catch (error) {
-    res.send('Announces not delete');
-    console.log(error)
+    res.send("Announces not delete");
+    console.log(error);
   }
 }
-
-

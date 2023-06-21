@@ -1,24 +1,20 @@
-
-import authenticateJWT from '../middlewares/authenticateJWT';
 import {
-    getAll, getById, create, updateById, deleteById, 
-  } from '../controllers/Annonces.controllers';
-  
-  const express = require('express');
-  
-  const routerannounces = express();
-  
-  // route getAll
-  routerannounces.get('/announces/', getAll);
-  //  route getById
-  routerannounces.get('/announces/:id', getById);
-  //  route post
-  routerannounces.post('/announces/',authenticateJWT, create);
+  getAll,
+  getById,
+  create,
+  updateById,
+  deleteById,
+} from "../controllers/Annonces.controllers";
+import authenticateJWT from "../middlewares/authenticateJWT";
 
+const express = require("express");
 
-  // route update
-  routerannounces.put('/announces/:id',authenticateJWT, updateById);
-  // route delete
-  routerannounces.delete('/announces/:id',authenticateJWT, deleteById);
-  export default routerannounces;
-  
+const routerannounces = express();
+
+routerannounces.get("/announces/", getAll);
+routerannounces.get("/announces/:id", getById);
+routerannounces.post("/announces/", authenticateJWT, create);
+routerannounces.put("/announces/:id", authenticateJWT, updateById);
+routerannounces.delete("/announces/:id", authenticateJWT, deleteById);
+
+export default routerannounces;
