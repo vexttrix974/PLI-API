@@ -1,54 +1,47 @@
+import { Request, Response } from "express";
+import { Annonces } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
-import { Request, Response } from 'express';
-import { Annonces } from '@prisma/client';
-const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-/**
- *  create the users
-*/
-export async function createAnnounces(req: Request, res:{ send: (arg0: string) => Response; }) {
+
+// CREATE ANNOUNCES
+export async function createAnnounces(req: Request, res: Response) {
   try {
-
-    const AnnoncesData: Annonces = req.body;
-
-    const annonces = await prisma.annonces.create({
-      data: AnnoncesData,
+    const datas: Annonces = req.body;
+    const QueryResult = await prisma.annonces.create({
+      data: datas,
     });
-    res.send(JSON.stringify(annonces, null, 2));
+    res.send(JSON.stringify(QueryResult, null, 2));
   } catch (error) {
-    res.send('Announces not create');
+    res.send("Announces not create");
     console.log(error);
   }
 }
-/**
- *  update the users
-*/
-export async function updateAnnounces(req: Request, res:{ send: (arg0: string) => Response; }) {
+
+// UPDATE ANNOUNCES
+export async function updateAnnounces(req: Request, res: Response) {
   try {
-    const  id  = parseInt(req.params.id);
+    const id = parseInt(req.params.id);
     await prisma.annonces.update({
-        data:req.body,
-        where: { id },
-      },
-    );
-     const newannounces = await prisma.annonces.findUnique({ where: { id }});
-    res.send(JSON.stringify(newannounces, null, 2));
+      data: req.body,
+      where: { id },
+    });
+    const QueryResult = await prisma.annonces.findUnique({ where: { id } });
+    res.send(JSON.stringify(QueryResult, null, 2));
   } catch (error) {
-    res.send('Announces has not been updated');
+    res.send("Announces has not been updated");
   }
 }
 
-/**
- *  delete the users
-*/
-export async function deleteAnnounces(req: Request, res:{ send: (arg0: string) => Response; }) {
+// DELETE ANNOUNCES
+export async function deleteAnnounces(req: Request, res: Response) {
   try {
-    const  id  = parseInt(req.params.id);
+    const id = parseInt(req.params.id);
     await prisma.annonces.delete({
       where: { id },
     });
-    res.send('Annonces delete');
+    res.send("Annonces delete");
   } catch (error) {
-    res.send('Announces  not delete');
+    res.send("Announces  not delete");
   }
 }

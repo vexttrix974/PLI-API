@@ -7,7 +7,7 @@ export default interface User {
     age: number;
     gender: string;
     location: string;
-    interests: string;
+    interest: string;
     profile_picture: string;
   }
  export default interface Annonces {

@@ -1,80 +1,83 @@
-import { Request, Response } from 'express';
-const { PrismaClient } = require('@prisma/client');
+import { createUser, deleteUser, updateUser } from "../services/Users.services";
+import { Request, Response } from "express";
+const { PrismaClient } = require("@prisma/client");
+
 const prisma = new PrismaClient();
-import { createUser, deleteUser, updateUser } from '../services/Users.services';
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
-const jwt = require('jsonwebtoken');
-/**
- *  getAll
-*/
-
-export async function getAll(req: Request, res:{ send: (arg0: string) => Response; }) {
-  const user = await prisma.user.findMany();
-  res.send(JSON.stringify(user, null, 2));
+// GET ALL
+export async function getAll(req: Request, res: Response) {
+  const QueryResult = await prisma.user.findMany();
+  res.send(JSON.stringify(QueryResult, null, 2));
 }
-/**
- *  getById
-*/
-export async function getById(req: Request, res:{ send: (arg0: string) => Response; }) {
-  const  id  = parseInt(req.params.id);
-  const user = await prisma.user.findUnique({
+
+// GET BY ID
+export async function getById(req: Request, res: Response) {
+  const id = parseInt(req.params.id);
+  const QueryResult = await prisma.user.findUnique({
     where: { id },
   });
-  res.send(JSON.stringify(user, null, 2));
+  res.send(JSON.stringify(QueryResult, null, 2));
 }
-/**
- *  create the new users
-*/
-export async function register(req: Request, res:{ send: (arg0: string) => Response; }) {
+
+// CREATE USER
+export async function register(req: Request, res: Response) {
   try {
     await createUser(req, res);
   } catch (error) {
-    res.send('User not create');
+    res.send("User not create");
     console.log(error);
   }
 }
 
-/**
- *  update the users
-*/
-export async function updateById(req: Request, res:{ send: (arg0: string) => Response; }) {
+// UPDATE USER
+export async function updateById(req: Request, res: Response) {
   try {
     await updateUser(req, res);
   } catch (error) {
-    res.send('User has been updated');
+    res.send("User has been updated");
   }
 }
 
-/**
- *  delete the users
-*/
-export async function deleteById(req: Request, res:{ send: (arg0: string) => Response; }) {
+// DELETE USER
+export async function deleteById(req: Request, res: Response) {
   try {
     await deleteUser(req, res);
   } catch (error) {
-    res.send('User not delete');
-    console.log(error)
+    res.send("User not delete");
+    console.log(error);
   }
 }
-export async function login(req: Request, res:{
-  json(arg0: { accessToken: any; }): unknown; send: (arg0: string) => Response;
-}) {
-  const request = {
-    email: req.body.email,
-    password: req.body.password,
-  };
-  const find = await prisma.user.findUnique({
-    where: { email: request.email },
+// LOGIN
+export async function login(req: Request, res: Response) {
+  const body = req.body;
+
+  const QueryResult = await prisma.user.findUnique({
+    where: { email: body.email },
   });
-  if(find && request.password===find.password){
 
-    const accessToken = jwt.sign({ email: request.email}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1days' });
-    res.json({
-      accessToken,
+  if (QueryResult) {
+    bcrypt.compare(body.password, QueryResult.password).then((valid: any) => {
+      if (!valid) {
+        res.status(404).send("error: email or password incorrect");
+      } else {
+        const acces = jwt.sign(
+          {
+            email: QueryResult.email,
+            id: QueryResult.id,
+          },
+          process.env.JWT_SIGN_SECRET,
+          {
+            expiresIn: "24h",
+          }
+        );
+        // console.log(acces)
+        const result = { token: acces };
+        return res.status(200).json(result);
+      }
     });
-  }
-   else {
-    res.send('Username or password incorrect');
+  } else {
+    res.status(404).send("error: email or password incorrect");
   }
 }
-
