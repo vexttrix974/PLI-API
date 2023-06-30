@@ -8,27 +8,41 @@ generator client {
 }
 
 model User {
-  id              Int     @id @default(autoincrement())
+  id              Int            @id @default(autoincrement())
   username        String
-  email           String  @unique
+  email           String         @unique
   password        String
   name            String
   age             Int
   gender          String
   location        String
-  interest        String
+  interest        UserInterest[] @relation("user_interests")
   profile_picture String
-  matchliked      Match[] @relation("likes")
-  matched         Match[] @relation("matches")
+  matchliked      Match[]        @relation("likes")
+  matched         Match[]        @relation("matches")
 
   sent_messages     Message[] @relation("sender")
   received_messages Message[] @relation("receiver")
 }
 
+model Interest {
+  id    Int            @id @default(autoincrement())
+  name  String         @unique
+  users UserInterest[] @relation("interestUsers")
+}
+
+model UserInterest {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(name: "user_interests", fields: [userId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  userId     Int
+  interest   Interest @relation(name: "interestUsers", fields: [interestId], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  interestId Int
+}
+
 model Match {
   id          Int       @id @default(autoincrement())
-  userLiked   User      @relation(name: "likes", fields: [user_id_1], references: [id])
-  userMatched User      @relation(name: "matches", fields: [user_id_2], references: [id])
+  userLiked   User      @relation(name: "likes", fields: [user_id_1], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  userMatched User      @relation(name: "matches", fields: [user_id_2], references: [id], onDelete: NoAction, onUpdate: Cascade)
   user_id_1   Int
   user_id_2   Int
   status      String
@@ -54,7 +68,7 @@ model Message {
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
 
-  match    Match @relation(name: "matchmessages", fields: [match_id], references: [id])
-  sender   User  @relation(name: "sender", fields: [sender_id], references: [id])
-  receiver User  @relation(name: "receiver", fields: [receiver_id], references: [id])
+  match    Match @relation(name: "matchmessages", fields: [match_id], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  sender   User  @relation(name: "sender", fields: [sender_id], references: [id], onDelete: NoAction, onUpdate: Cascade)
+  receiver User  @relation(name: "receiver", fields: [receiver_id], references: [id], onDelete: NoAction, onUpdate: Cascade)
 }
