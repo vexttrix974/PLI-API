@@ -15,7 +15,7 @@ const routerusers = express();
 routerusers.get("/users/", getAll);
 routerusers.get("/users/:id", getById);
 routerusers.post("/users/register/", register);
-routerusers.post("/users/auth/", login, register);
+routerusers.post("/users/auth/", login);
 routerusers.put("/users/:id", authenticateJWT, updateById);
 routerusers.delete("/users/:id", authenticateJWT, deleteById);
 

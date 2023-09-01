@@ -14,7 +14,7 @@ export default function authenticateJWT(
   const authHeader = req.headers.authorization;
   if (authHeader) {
     const token = authHeader.split(" ")[1];
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err: any) => {
+    jwt.verify(token, process.env.JWT_SIGN_SECRET, (err: any) => {
       console.log(err);
 
       if (err) {
