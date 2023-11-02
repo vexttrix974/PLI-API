@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/vexttrix974/PLI-API#readme",
   "dependencies": {
-    "@prisma/client": "^4.15.0",
+    "@prisma/client": "^5.4.2",
     "bcrypt": "^5.1.0",
     "class-transformer": "^0.5.1",
     "cors": "^2.8.5",
@@ -33,6 +33,6 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.17",
-    "prisma": "^4.15.0"
+    "prisma": "^5.4.2"
   }
 }

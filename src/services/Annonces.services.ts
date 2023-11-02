@@ -8,12 +8,14 @@ const prisma = new PrismaClient();
 export async function createAnnounces(req: Request, res: Response) {
   try {
     const datas: Annonces = req.body;
+    console.log(datas);
     const QueryResult = await prisma.annonces.create({
       data: datas,
     });
+    console.log(QueryResult);
     res.send(JSON.stringify(QueryResult, null, 2));
   } catch (error) {
-    res.send("Announces not create");
+    res.send("Announces not created");
     console.log(error);
   }
 }

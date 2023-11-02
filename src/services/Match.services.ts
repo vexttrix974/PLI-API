@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 // CREATE MATCH
 export async function createMatch(req: Request, res: Response) {
   try {
-    const datas: IMatch = req.body;
+    const datas: IMatch = JSON.parse(req.body);
 
     const QueryResult = await prisma.match.create({
       data: datas,

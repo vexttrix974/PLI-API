@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 // CREATE MESSAGE
 export async function createMessage(req: Request, res: Response) {
   try {
-    const datas: IMessage = req.body;
+    const datas: IMessage = JSON.parse(req.body);
 
     const QueryResult = await prisma.message.create({
       data: datas,
